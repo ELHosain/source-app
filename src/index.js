@@ -1,40 +1,33 @@
+// src/index.js
 const express = require("express");
 
 const app = express();
 app.use(express.json());
 
-/**
- * Route test
- */
+// Route GET /
 app.get("/", (req, res) => {
-  res.send("Hello world!");
+  res.status(200).send("Hello World");
 });
 
-/**
- * Route POST /sum
- */
+// Route POST /sum  { "a": 1, "b": 2 }
 app.post("/sum", (req, res) => {
   const { a, b } = req.body;
 
+  // Validation
   if (typeof a !== "number" || typeof b !== "number") {
     return res.status(400).json({ error: "Invalid input" });
   }
 
-  res.json({ result: a + b });
+  return res.status(200).json({ result: a + b });
 });
 
-/**
- * ✅ Export app pour les tests (SUPER IMPORTANT)
- */
+// ✅ IMPORTANT : on exporte l'app pour les tests
 module.exports = app;
 
-/**
- * ✅ Lance le serveur seulement hors tests / CI
- */
+// ✅ Lancer le serveur seulement si on exécute "node src/index.js"
 if (require.main === module) {
-  const port = process.env.PORT || 3000;
-
-  app.listen(port, () => {
-    console.log(`App listening at http://localhost:${port}`);
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
   });
 }
